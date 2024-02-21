@@ -5,6 +5,8 @@ import Input from "./Input/Input";
 import Icon from "./Icon/Icon";
 import IconSelector from "./IconSelector/IconSelector";
 import Button from "./Button/Button";
+import Checkbox from "./Checkbox/Checkbox";
+import IconButton from "./IconButton/IconButton";
 
 export {
   Surface,
@@ -14,4 +16,6 @@ export {
   Icon,
   IconSelector,
   Button,
+  Checkbox,
+  IconButton,
 };

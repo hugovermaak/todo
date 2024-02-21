@@ -1,6 +1,8 @@
+import { IndexableType } from "dexie";
+
 export type Todo = {
-  id?: string;
-  listId: string;
+  id?: IndexableType;
+  listId: IndexableType | undefined;
   label: string;
   order: number;
   dateCreated?: Date;

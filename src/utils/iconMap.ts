@@ -1,3 +1,5 @@
+// The iconMap object is a map of icon names to their respective Heroicons.
+// This is used to render the correct icon based on the icon name.
 import {
   HomeIcon,
   AcademicCapIcon,

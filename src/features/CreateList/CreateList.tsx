@@ -1,36 +1,66 @@
 import { useState } from "react";
 import { Icon, Input, IconSelector, Button } from "@/components";
 import IconName from "@/types/IconName";
+import { TodoList } from "@/types";
 import availableIcons from "@/utils/availableIcons";
+import db from "@/data/db";
+import { IndexableType } from "dexie";
 
-const CreateList = () => {
-  const [newListName, setNewListName] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState<IconName>(
-    availableIcons[Math.floor(Math.random() * availableIcons.length)]
-  );
+type CreateListProps = {
+  onClose: () => void;
+  onCreated: (id: IndexableType) => void;
+};
 
+const CreateList = ({ onClose, onCreated }: CreateListProps) => {
+  const [newList, setNewList] = useState({
+    label: "",
+    todoCount: 0,
+    dateCreated: new Date(),
+    dateUpdated: new Date(),
+    icon: availableIcons[Math.floor(Math.random() * availableIcons.length)],
+    order: 0,
+  } as TodoList);
+
+  // Update the label of the new list
   const handleSetName = (value: string) => {
-    setNewListName(value);
+    setNewList({
+      ...newList,
+      label: value,
+    });
   };
+
+  // Update the icon of the new list
   const handleSetIcon = (value: IconName) => {
-    setSelectedIcon(value);
+    setNewList({
+      ...newList,
+      icon: value,
+    });
   };
 
-  const handleCreate = () => {
-    console.log(newListName, selectedIcon);
+  // Create a new list
+  const handleCreate = async () => {
+    try {
+      const id = await db.todoLists.add({
+        ...newList,
+      });
+      onCreated(id);
+    } catch (e) {
+      console.log("Some error occurred: ", e);
+    }
   };
 
+  // Cancel the creation of a new list
   const handleCancel = () => {
-    console.log("cancel");
+    onClose();
   };
 
   return (
     <section className="flex flex-col gap-2 border border-zinc-200 p-4 rounded-lg shadow-lg">
       <div className="flex items-center gap-2 mb-2">
-        <Icon name={selectedIcon} className="w-5 h-5" />
+        <Icon name={newList.icon} className="w-5 h-5" />
         <Input
           onChange={handleSetName}
-          value={newListName}
+          value={newList.label}
           className="flex-1"
         />
       </div>

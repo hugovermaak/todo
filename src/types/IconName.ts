@@ -1,3 +1,4 @@
+// Just a type to make sure that the icon name is one of the available icons
 type IconName =
   | "home"
   | "academicCap"

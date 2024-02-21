@@ -1,4 +1,10 @@
-import { useEffect, useState, KeyboardEvent, ChangeEvent } from "react";
+import {
+  useEffect,
+  useState,
+  KeyboardEvent,
+  ChangeEvent,
+  MouseEvent,
+} from "react";
 
 type InputProps = {
   className?: string;
@@ -37,6 +43,10 @@ const Input = ({
     }
   };
 
+  const handleClick = (event: MouseEvent) => {
+    event.stopPropagation();
+  };
+
   return (
     <input
       className={`${styleClasses} ${className}`}
@@ -45,6 +55,7 @@ const Input = ({
       value={value}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      onClick={handleClick}
     />
   );
 };

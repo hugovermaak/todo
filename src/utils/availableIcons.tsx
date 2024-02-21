@@ -1,5 +1,6 @@
 import IconName from "@/types/IconName";
 
+// A list of available icons, makes selecting a random icon easier
 const availableIcons = [
   "home",
   "academicCap",

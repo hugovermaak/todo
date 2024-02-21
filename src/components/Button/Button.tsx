@@ -37,9 +37,9 @@ const Button = ({
 
   useEffect(() => {
     if (color === "default") {
-      setColorClasses("bg-zinc-300");
+      setColorClasses("bg-zinc-200");
     } else {
-      setColorClasses("bg-rose-500");
+      setColorClasses("bg-orange-600 text-white");
     }
   }, [color]);
 

@@ -21,7 +21,7 @@ const IconSelector = ({ onSelect }: IconSelectorProps) => {
               setSelected(icon);
             }}
             className={`hover:bg-zinc-200 rounded-full p-2 ${
-              icon === selected && "bg-rose-500"
+              icon === selected && "bg-orange-300"
             }`}
             key={icon}
           >

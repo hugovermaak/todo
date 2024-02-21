@@ -1,3 +1,5 @@
+import { TodoList } from "./TodoList";
 import { Todo } from "./Todo";
+import IconName from "./IconName";
 
-export type { Todo };
+export type { TodoList, Todo, IconName };

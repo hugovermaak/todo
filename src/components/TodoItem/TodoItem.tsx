@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Todo } from "@/types/Todo";
-import { Surface } from "@components/index";
+import db from "@/data/db";
+import { Surface, IconButton, Checkbox, Input } from "@components/index";
 import { CalendarDaysIcon, TrashIcon } from "@heroicons/react/16/solid";
-import IconButton from "../IconButton/IconButton";
 
 type TodoItemProps = {
   todo: Todo;
-  onComplete: () => void;
-  onDelete: () => void;
-  onSetReminder: () => void;
+  onComplete?: () => void;
+  onDelete?: () => void;
+  onUpdate?: () => void;
+  onSetReminder?: () => void;
 };
 
 const TodoItem = ({
@@ -16,8 +17,33 @@ const TodoItem = ({
   onComplete,
   onDelete,
   onSetReminder,
+  onUpdate,
 }: TodoItemProps) => {
   const [showActions, setShowActions] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [todoToEdit, setTodoToEdit] = useState<Todo | null>(null);
+
+  const toggleEditMode = (todo: Todo) => {
+    setEditMode(!editMode);
+    if (editMode) {
+      setTodoToEdit(todo);
+    }
+  };
+
+  const handleSetLabel = (value: string) => {
+    setTodoToEdit({
+      ...todoToEdit!,
+      label: value,
+    });
+  };
+
+  const handleUpdateTodo = () => {
+    db.todos.update(todoToEdit!.id!, { label: todoToEdit!.label }).then(() => {
+      setEditMode(false);
+      onUpdate!();
+    });
+  };
+
   const disabled = todo.isCompleted;
   return (
     <Surface
@@ -27,14 +53,31 @@ const TodoItem = ({
         disabled && "!bg-zinc-50/70"
       } flex gap-4 relative transition-shadow duration-300 hover:shadow-md items-center cursor-pointer`}
     >
-      <label htmlFor={todo.id} className="flex gap-4">
-        <input id={todo.id} type="checkbox" onChange={onComplete} />
-        <span
-          className={`${todo.isCompleted ? "line-through opacity-30" : ""}`}
-        >
-          {todo.label}
-        </span>
-      </label>
+      <div
+        className="flex gap-4 w-full items-center"
+        onClick={() => toggleEditMode(todo)}
+      >
+        <Checkbox
+          id={String(todo.id)}
+          onChange={onComplete!}
+          checked={todo.isCompleted}
+        />
+        <div>
+          {editMode && todoToEdit ? (
+            <Input
+              value={todoToEdit.label}
+              onChange={handleSetLabel}
+              onEnter={handleUpdateTodo}
+            />
+          ) : (
+            <span
+              className={`${todo.isCompleted ? "line-through opacity-30" : ""}`}
+            >
+              {todo.label}
+            </span>
+          )}
+        </div>
+      </div>
       {showActions ? (
         <div className="absolute right-2 flex gap-1 bg-zinc-50 shadow-sm items-center p-1 rounded-lg border border-zinc-200">
           <IconButton onClick={onSetReminder} disabled={todo.isCompleted}>
